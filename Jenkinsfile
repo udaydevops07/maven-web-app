@@ -1,29 +1,40 @@
 pipeline {
     agent any
+  
+    tools {
+        maven 'maven'
+    }    
+
+    environment {
+        KUBECONFIG = credentials('kubernetes')
+    } 
     
-    tools{
-        maven 'Maven-3.9.9'
-    }
     stages {
-        stage('clone') {
+
+        stage('Clone') {
             steps {
-              git 'https://github.com/ashokitschool/maven-web-app.git'
+                git 'https://github.com/udaydevops07/maven-web-app.git'
             }
         }
-        stage('build'){
-            steps{
-                 sh 'mvn clean package'
-            }
-        }
-        stage('docker image'){
+
+        stage('Build') {
             steps {
-                sh 'docker build -t ashokit/mavenwebapp .'
+                sh 'mvn clean package'
             }
         }
-        stage('k8s deploy'){
-            steps{
-               sh 'kubectl apply -f k8s-deploy.yml'
+
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t udaydevops07/mavenwebapp:v2 .'
             }
         }
+    stage('K8s Deployment') {
+        steps {
+            withCredentials([file(credentialsId: 'kubernetes', variable: 'KUBECONFIG')]) {
+                sh 'kubectl get nodes'
+                sh 'kubectl apply -f k8s-deploy.yml'
+        }
+    }
+}
     }
 }
