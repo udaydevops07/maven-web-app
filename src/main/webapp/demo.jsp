@@ -1,5 +1,12 @@
-<html>  
-<body> 
-<% out.print("welcome to jsp") %>  
-</body>  
-</html> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome Page</title>
+</head>
+<body>
+
+<% out.print("Welcome to JSP"); %>
+
+</body>
+</html>
